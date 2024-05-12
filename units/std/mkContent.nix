@@ -1,13 +1,7 @@
 # SPDX-FileCopyrightText: 2024 The omnibus Authors
 #
 # SPDX-License-Identifier: MIT
-
-{
-  flops,
-  inputs,
-  lib,
-  root,
-}:
+{ flops, inputs, lib, root, }:
 top:
 let
   inherit (inputs) std;
@@ -19,17 +13,10 @@ recursiveMerge [
       omnibusStd = root;
       inherit std;
     };
-    systems = [
-      "aarch64-darwin"
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
-    cellBlocks =
-      with std.blockTypes;
-      let
-        functions' = name: (functions name) // { cli = false; };
-      in
-      [
+    systems = [ "aarch64-linux" "x86_64-linux" ];
+    cellBlocks = with std.blockTypes;
+      let functions' = name: (functions name) // { cli = false; };
+      in [
         (data "configs")
         (data "data")
         (installables "packages" { ci.build = true; })
